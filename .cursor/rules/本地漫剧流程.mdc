@@ -1,0 +1,111 @@
+---
+description: 任意外部 Agent 按统一技能完成漫剧制作；用户可选择实时画布或人类可读的本地目录，两种模式使用相同创作规则和质量关口。
+alwaysApply: true
+---
+
+# 漫剧制作流程
+
+仅在用户制作漫剧、短剧、小说改编、剧本、角色、场景、分镜、图片或视频时执行。普通编程任务忽略本规则。
+
+必须使用：
+
+- 默认制作：`.cursor/skills/workflow/SKILL.md`
+- 旧版复现：`.cursor/skills/v118workflow/SKILL.md`，只有用户明确点名 v1.1.8 或旧版时使用
+- 已有画布：`.cursor/skills/mcp-canvas-runtime/SKILL.md`
+- 安装画布：`.cursor/skills/toonflow-windows-setup/SKILL.md`
+- 纯本地执行：`.cursor/skills/local-readable-runtime/SKILL.md`
+- Vidu 总路由：`.cursor/skills/vidu-video-prompt/SKILL.md`
+- Vidu Q2：`.cursor/skills/vidu-q2-video-prompt/SKILL.md`
+- Vidu Q3：`.cursor/skills/vidu-q3-video-prompt/SKILL.md`
+
+当前对话 Agent 负责全部文字创作；不得调用 `runAgent` 委托内置 Agent。除本规则明确点名的 Vidu Skill 外，不要打开本仓库其他短剧、小说、角色、分镜或视频提示词技能。
+
+## 强制入口
+
+用户发来创意、小说、故事、剧本或某个章节，并要求制作、改编、开始或继续时：
+
+1. 先检查当前消息、项目状态和既有回答。尚未明确本项目的执行模式时，第一步只问一次：
+   - **已有 Toonflow，并使用画布**
+   - **没有 Toonflow，但需要安装后使用画布**
+   - **不使用 Toonflow，直接按本地目录制作**
+2. 用户已明确模式或项目状态已有记录时不重复询问。模式只控制保存、布局和媒体执行入口，不改变 `workflow` 的文字内容、提示词格式、质量标准、确认关口和验收规则。
+3. 选择“已有并使用”时，读取 `mcp-canvas-runtime/SKILL.md`，先用 `getAppState` 绑定连接、项目和画布；MCP 未连接时停下说明，不得直接修改画布 JSON。
+4. 选择“需要安装”时，读取 `toonflow-windows-setup/SKILL.md`，默认按 Windows 流程完成安装和 MCP 接入，再按上一项绑定画布：
+   - GitHub 可访问：从官方仓库/官方 Release 获取，允许按官方说明 `git clone`、构建或安装完整 Windows 安装包。
+   - GitHub 不可访问：从当前 Agent 能验证来源且许可证允许分发的官方安装包或已构建产物制作离线包；不得把 API Key、MCP Token、用户设置、项目、缓存或个人数据打入离线包。
+   - 没有可验证的合法安装源或构建产物时如实停下，不伪造安装包。
+5. 选择“不使用”时，读取 `local-readable-runtime/SKILL.md`；所有成果保存在人类可读的中文目录和文件名中，不创建画布 JSON，不生成 UUID-only 目录，不要求 MCP。
+6. 模式确定后，完整读取用户本次提供或明确指定的源材料；读取 `workflow/SKILL.md`，判断当前输入属于“从哪里开始”的哪一行，只读取当前阶段明确点名的 reference。
+7. 从实际阶段继续，不套已删除的七节流程，不要求用户补与当前交付无关的上游文档。
+
+## 模式回执
+
+用户选定模式后，必须先在对话框中明确回显实际执行方式，再继续制作：
+
+- **已有画布**：说明将使用 Toonflow 画布；完成绑定后报告客户端连接状态、项目绝对路径和画布名称。尚未连通时说明具体缺项，不得声称已经连接。
+- **需要安装**：说明将走在线安装还是离线包；完成后报告来源、版本、安装程序或离线包的绝对路径、SHA-256 校验文件位置、客户端安装位置和 MCP 验证结果。失败时报告停在哪一步以及缺少什么。
+- **本地制作**：说明不使用 Toonflow/MCP，并报告 `作品/<作品名>/` 的实际绝对路径、当前已创建的目录和本轮写入文件。不得只说“已保存”而不告诉用户在哪里。
+
+离线包未实际生成时必须直说“尚未生成”，不能把已有安装目录或某个原始安装程序冒充为已整理好的离线交付包。
+
+## 阶段与技能映射
+
+### 1. 输入、改编与剧本
+
+- 主技能：`workflow/SKILL.md`
+- 按需资料：`workflow/references/sourceAndScript.md`
+- 只有它要求时再读：
+  - `workflow/references/methods/storyDevelopment.md`
+  - `workflow/references/methods/screenAdaptation.md`
+- 执行：保存原文，产出当前范围的可视听剧本或诊断。
+- 关口：按原技能展示这个阶段的实质成果，等待内容确认；用户没确认不抢做正式资产。
+
+### 2. 角色、场景与道具
+
+- 主资料：`workflow/references/assets.md`
+- 按需资料：
+  - `workflow/references/methods/visualDesign.md`
+  - `workflow/references/methods/colorAndLight.md`
+- 正式资产设计前执行一次“参考素材与风格入口”：
+  - 先检查当前消息、附件、用户指定路径、项目已有素材和 `productionState.md`，不要重复询问已经明确的内容。
+  - 尚未明确画风时，询问用户选择：提供画风参考图、提供文字风格描述，或由当前模型先提出风格方案。
+  - 询问用户是否提供角色、场景、道具、服装、站位或构图参考图；允许回答“没有”。
+  - 用户已提供图片但用途不清时，只询问每张图分别控制画风、身份、服装、场景、道具、站位还是构图，不自行混用。
+  - 将用户选择、真实文件路径和每张参考图的用途记录到 `productionState.md`。用户明确没有参考图后不再重复询问，按技能生成设计提案。
+  - 这一步只取得设计输入，不等于批准生成图片。
+- 执行：只提取本次剧本真实需要的资产，沿用原版角色参考板、场景主视图和道具参考板格式。
+- 关口：设计确认不等于生成授权。
+
+### 3. 图片生成
+
+- 执行技能：画布模式用 `mcp-canvas-runtime/SKILL.md`；本地模式用 `local-readable-runtime/SKILL.md`。
+- 模型、提示词版式、参考关系、数量、规格和验收仍按 `workflow` 与 `assets.md`。
+- 图片未指定模型时，按原流程优先使用当前执行环境真实可用且满足规格的 gpt-image。
+- 画布模式通过图片节点真实函数设置并回读；本地模式通过当前 Agent 的真实媒体工具设置，并把配置、参考路径、任务状态和输出路径写入项目记录。
+- 生成前必须展示数量、模型、规格、完整提示词、参考、次数和可靠报价；用户明确批准后才调用真实生成函数。
+- 生成成功不等于采用；逐项验收并记录采用结果。
+
+### 4. 片段与视频提示词
+
+- 已确认剧本进入视频制作时，先锁定用户指定的视频模型家族；提示词必须按目标模型路由，不能把一种模型的模板改个模型名后交给另一种模型。
+- 用户尚未指定模型家族时，只问一次“使用 Seedance、Vidu，还是其他模型（请注明）？”；不得用节点默认值、历史项目或执行模式替用户决定。
+- **Seedance 2.0/2.5**：严格执行 `workflow/SKILL.md` 内嵌的 `SEEDANCE EPISODE DIRECTOR · PART A`；选择 Seedance 后若版本未定，再问一次“2.0 还是 2.5”。全片段表、A9、A11 和 A12 保持原版。每个正式提示词交付前运行 `.cursor/skills/workflow/scripts/validate_seedance_prompt.py`。
+- **Vidu**：先读取 `.cursor/skills/vidu-video-prompt/SKILL.md`。用户只说 Vidu 时必须让用户选择 Q2 或 Q3，不得由价格、节点默认值或历史任务替用户决定：
+  - Q2：读取 `vidu-q2-video-prompt/SKILL.md`，再让用户从当前真实可用型号中选择。Q2 Pro Fast 只走图生/首尾帧；多参考必须选择 Q2 Pro Reference。交付前运行 `vidu-q2-video-prompt/scripts/validate_vidu_q2_prompt.py`。
+  - Q3：读取 `vidu-q3-video-prompt/SKILL.md`，再让用户从当前真实可用的 Pro、Pro Fast、Turbo、Reference、Mix、Drama、Ad 中选择。交付前运行 `vidu-q3-video-prompt/scripts/validate_vidu_q3_prompt.py`。
+  - Q2/Q3 均使用各自专用模板，不得套用 Seedance A9；型号、模式、参考数量、时长、分辨率和音频能力必须来自当前节点/API及对应供应商文档。
+- **其他视频模型**：不得套用 Seedance 或 Vidu 模板；先读取该模型当前官方提示词与能力规范。当前环境没有可靠规范时停下说明，不凭经验伪造专用格式。
+- 所有模型都沿用已确认剧情、资产、连续性、内容确认、算力授权和结果采用关口。格式校验失败必须本轮修正，不得交付或进入生成。
+
+### 5. 视频生成、验收与交付
+
+- 执行技能：画布模式用 `mcp-canvas-runtime/SKILL.md`；本地模式用 `local-readable-runtime/SKILL.md`。
+- 状态和验收：`workflow/references/stateAndDelivery.md`
+- 视频模型必须由用户明确指定。画布模式只使用节点真实提供的配置；本地模式只使用当前 Agent 已配置且可验证的真实接口。没有该能力就停在已批准提示词，不换模型。
+- 内容确认、媒体生成授权、结果采用是三个独立关口。
+
+## 成果落位
+
+- **画布模式**：所有成果通过 MCP 写入当前项目的正式文本、图片、视频和音频节点，引用通过真实连线建立；不得直接写画布 JSON，不另建平行的自定义目录体系。
+- **本地模式**：按 `local-readable-runtime` 的固定中文目录保存，同一成果只保留一个权威文件位置；文件名表达作品、集数、资产名、段号和版本，不以 UUID 充当用户可见名称。
+- 两种模式的提示词正文都必须使用 `workflow` 原模板，不得为了目录或界面适配改写正文风格。状态都必须区分待确认、已确认、待生成、生成中、待验收、已采用和已交付。

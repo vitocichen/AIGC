@@ -1,0 +1,32 @@
+# 生成作品与媒体
+作品/
+*.mp4
+*.mov
+*.avi
+*.wav
+*.mp3
+*.png
+*.jpg
+*.jpeg
+*.webp
+
+# 允许提交 Toonflow 官方离线安装程序
+!Toonflow离线安装包/**/*.exe
+
+# 凭据与本机配置
+.env
+.env.*
+settings.json
+mcp.json
+mcpRuntime*.json
+*token*
+*secret*
+*credential*
+
+# 缓存与临时文件
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
+*.tmp
+*.log

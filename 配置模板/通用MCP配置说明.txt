@@ -1,0 +1,6 @@
+传输类型：Streamable HTTP MCP
+地址：http://127.0.0.1:<设置页实际端口>/mcp
+请求头：Authorization: Bearer <设置页实际凭据>
+
+必须从 Toonflow“设置 → MCP”读取当前实际端口和凭据，不要照抄占位符。
+凭据写入客户端用户级配置，不要写进项目文件、规则、Skill 或远端仓库。

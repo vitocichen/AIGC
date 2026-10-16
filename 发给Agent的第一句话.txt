@@ -1,0 +1,16 @@
+请先解压并读取本包中的：
+
+1. 规则与Skills/AGENTS.md
+2. 规则与Skills/.cursor/rules/本地漫剧流程.mdc
+
+然后严格按规则读取其中点名的 Skill 及其 references/scripts，不要自行改用其他短剧、分镜、角色或视频提示词技能。
+
+开始制作时，先询问我选择哪种执行方式：
+
+1. 已有 Toonflow，使用画布；
+2. 没有 Toonflow，需要安装后使用画布；
+3. 不使用 Toonflow，直接按人类可读的本地目录制作。
+
+如果当前 Agent 不会自动识别 `.cursor/skills`，请把这些文件当作普通项目指令主动读取。文字创作必须由当前 Agent 完成，不调用 Toonflow 内置 Agent；画布模式通过 MCP 正式节点工具执行，本地模式不得降低或改写 workflow 的文字质量、提示词模板和验收标准。
+
+进入视频提示词阶段时必须让我选择模型：Seedance 保持原 PART A/A9；Vidu 必须继续让我选择 Q2 或 Q3，再读取对应专用 Skill，不能把不同型号、接口或模板混用。

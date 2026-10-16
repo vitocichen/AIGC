@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "toonflow": {
+      "url": "http://127.0.0.1:<设置页实际端口>/mcp",
+      "headers": {
+        "Authorization": "Bearer <设置页实际凭据>"
+      }
+    }
+  }
+}

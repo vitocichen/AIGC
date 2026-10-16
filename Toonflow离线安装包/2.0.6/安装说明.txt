@@ -1,0 +1,16 @@
+Toonflow 2.0.6 Windows 离线安装说明
+
+1. 先使用同目录 SHA256SUMS.txt 核对 toonflow-2.0.6-Setup.exe。
+2. 关闭旧版 Toonflow。
+3. 双击 toonflow-2.0.6-Setup.exe，按安装界面完成安装。
+4. 启动 Toonflow，打开或创建项目。
+5. 进入“设置 → MCP”，启用 MCP。
+6. 复制界面实际显示的 HTTP 地址和 Bearer 凭据到目标 Agent 的用户级 MCP 配置。
+7. 重新加载 Agent 客户端，调用 getAppState 和 getCanvas 验证。
+
+注意：
+- 默认面向 Windows 用户。
+- 本包不含 API Key、模型配置或 MCP Token。
+- 不要把 Bearer 凭据提交到项目或远端仓库。
+- 如果不需要 Toonflow，跳过安装，直接使用本包的本地目录模式。
+- 软件许可证见同目录 LICENSE。
