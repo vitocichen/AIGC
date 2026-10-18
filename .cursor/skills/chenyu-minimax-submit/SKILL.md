@@ -1,8 +1,8 @@
 ---
 name: chenyu-minimax-submit
 description: >-
-  把 MiniMax H3 视频用 HTTP 提交到用户当次确认仍在线的晨羽智云 ComfyUI，不控制鼠标、不点击网页。
-  用户要在晨羽、Chenyu、ComfyUI 云上生成 MiniMax，或别的 Agent 说没有云接口、想点网页代生成时使用。
+  把 MiniMax H3 的融合Ref｜8步用 HTTP 提交到用户当次确认仍在线的晨羽智云 ComfyUI，不控制鼠标、不点击网页。
+  用户要在晨羽、Chenyu、ComfyUI 云上生成 MiniMax，或提到融合Ref｜8步、ref 8步，或别的 Agent 说没有云接口、想点网页代生成时使用。
 ---
 
 # 晨羽 ComfyUI 提交 MiniMax H3
@@ -42,7 +42,9 @@ description: >-
 
 ## 工作流
 
-`POST /prompt`，JSON 为 `{"prompt": <下图>, "client_id": <随机>}`. 融合 8 步，`1344×768`，24fps，不加 FL2VA，不接 `first_frame`。参考图从 `reference_image_0` 往后接，每张一个 `LoadImage`。
+云上只用这一套，简写是 **融合Ref｜8步**。别的 Agent 看到「融合Ref｜8步」「融合 Ref 8 步」或「ref 8步」，就是下面这个工作流，不要换成 FL2VA、25 步或 Wan。
+
+`POST /prompt`，JSON 为 `{"prompt": <下图>, "client_id": <随机>}`。`1344×768`，24fps，不加 FL2VA，不接 `first_frame`。参考图从 `reference_image_0` 往后接，每张一个 `LoadImage`。
 
 时长帧数用 `max(5, round(秒 × 24))`，再补到能被当前融合步长接受的长度：`帧 + (5 - 帧 % 17) % 17`。一次不超过规则里的上限。当前上限是 8 秒、192 帧。更长不要提交。
 

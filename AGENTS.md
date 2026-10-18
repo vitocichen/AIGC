@@ -7,7 +7,7 @@
 - 执行前读取 `.cursor/rules/本地漫剧流程.mdc`，再按阶段读取 `workflow` 点名的 reference。
 - 新项目开始时先问一次创造方式，已有记录不重复问。方式 1（推荐）：本对话做大脑，Toonflow 只做画布管理资源。方式 2：只用本对话，不用其他软件。方式 3：完全使用 Toonflow，选定后停止后续创作，让用户自己在 Toonflow 里操作。
 - 方式 1 或方式 3 需要 Toonflow 时，当前 Agent 自己安装，Git 能用就从官方仓库或 Release 安装，不能用就做不含凭据和用户数据的离线包。方式 1 读取 `.cursor/skills/mcp-canvas-runtime/SKILL.md`，先调用 `getAppState`。方式 2 读取 `.cursor/skills/local-readable-runtime/SKILL.md`，用人类可读的中文目录保存。方式 3 安装或连通后即停止。
-- 方式 1 或方式 2 接着各问一次图片和视频，用来决定提示词写给谁。图片方式 1（推荐）用本对话的图片模型；图片方式 2 由用户提供链接或自行生成，当前 Agent 只写提示词。视频方式 1（推荐，最省钱）是云端 ComfyUI + MiniMax H3，把 https://www.chenyu.cn/console/shop 发给用户，推荐「星辰AI-ComfyUI视频专用镜像」和 5090，有可用地址后再操作。真正提交时读取 `.cursor/skills/chenyu-minimax-submit/SKILL.md`，用 HTTP 提交，不控制鼠标，不点击网页生成。视频方式 2 是 Seedance，用户提供 API 或自己去豆包生成。视频方式 3 是 Vidu，效果差，不推荐。
+- 方式 1 或方式 2 接着各问一次图片和视频，用来决定提示词写给谁。图片方式 1（推荐）用本对话的图片模型；图片方式 2 由用户提供链接或自行生成，当前 Agent 只写提示词。视频方式 1（推荐，最省钱）是云端 ComfyUI + MiniMax H3，把 https://www.chenyu.cn/console/shop 发给用户，推荐「星辰AI-ComfyUI视频专用镜像」和 5090，有可用地址后再操作。真正提交时读取 `.cursor/skills/chenyu-minimax-submit/SKILL.md`。云上模型简写是融合Ref｜8步，用 HTTP 提交，不控制鼠标，不点击网页生成。视频方式 2 是 Seedance，用户提供 API 或自己去豆包生成。视频方式 3 是 Vidu，效果差，不推荐。
 - 当前外部 Agent 负责文字、提示词、授权、执行核对、验收与记录。不得调用 `runAgent` 委托内置 Agent；不得调用 Toonflow 的 `node:generateImage`、`node:generateAudio`、`generateVideo` 或 `node:generateVideo`。Toonflow 只管理资源。
 - 画布模式不得直接修改带 `toonflowCanvas` 标记的 JSON；本地模式不得仿造画布节点结构。
 - 正式资产设计前询问一次画风来源和可提供的角色、场景、道具、服装、站位或构图参考图；已有答案不重复问，用户可明确选择没有参考图。
