@@ -174,6 +174,14 @@ def validate_25(text: str, errors: list[str]) -> None:
         errors.append("`Target duration` 必须使用 `X seconds`")
     if not re.search(r"【0:\d{2}-0:\d{2}】", text):
         errors.append("`Timeline` 缺少 `【0:00-0:XX】` 时间块")
+    avoid = ""
+    for index, (name, _, end) in enumerate(fields):
+        if name == "Avoid":
+            next_start = fields[index + 1][1] if index + 1 < len(fields) else len(text)
+            avoid = text[end:next_start]
+            break
+    if "Avoid" in names and "不要字幕" not in avoid:
+        errors.append("`Avoid` 必须包含「不要字幕」。视频画面不得烧录字幕、对白或旁白")
 
     for index, (name, _, end) in enumerate(fields):
         next_start = fields[index + 1][1] if index + 1 < len(fields) else len(text)
