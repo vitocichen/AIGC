@@ -37,13 +37,13 @@ description: >-
 
 ## 提示词
 
-正文按 `workflow` 的 Seedance 2.5 A9.2，并先通过 `validate_seedance_prompt.py --model 2.5`。
+正文按全局技能 `minimax-h3-prompt-optimizer` 书写，不使用 Seedance A9，不运行 `validate_seedance_prompt.py`。
 
 发给模型的字符串必须：
 
-- 去掉 `【制片交接卡｜不发送给模型】` 及其后全部内容。交接卡留在磁盘文件里。
-- 把参考图行里的文件名换成 `- 参考图`。可用 `(?m)^- \S+\.(?:png|jpg|jpeg|webp)` 替换。磁盘上的提示词仍保留真实路径。
-- 确认发出的字符串里没有交接卡、图片文件名和 `first_frame`。
+- 只保留 MiniMax 字段。有参考图时是 `subject_definitions`、`summary`、`retention_analysis`、`detailed_description`、`overall_soundscape`、`non_diegetic_music`，再加末尾一行「无屏幕文字。不要字幕，不要出现多余的中文文字、乱码或错别字。」
+- 去掉文件开头的段头，去掉 `【制片交接卡｜不发送给模型】` 及其后全部内容。段头和交接卡留在磁盘文件里。
+- 确认发出的字符串里没有交接卡、Seedance 字段名、`Objective`、`Target duration`、`Timeline`、「8秒」「8 seconds」「本段时长」「16:9」、图片文件名和 `first_frame`。
 
 ## 上传参考图
 

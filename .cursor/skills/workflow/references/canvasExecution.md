@@ -1,6 +1,6 @@
 # 画布执行
 
-> **Seedance 使用边界：** 本文件只负责把已定稿成果放到画布上或执行已经逐次授权的 Toonflow 视频生成，不参与 Seedance prompt 的创作。只要已有可执行剧本/时间轴且目标进入视频制作/生成/修订，必须先由主 `SKILL.md` 的“Seedance 路由锁存”进入内嵌 PART A；**不得把五个画布读取工具或节点配置当作 Seedance 之前的入口步骤。** 正式提示词必须先由 PART A 规划/定稿；本文件不得重新分段、改写 A9.1/A9.2 格式、替换 Timeline、补表演/运镜/连续性规则。用户对画幅、分辨率、模式、音频等配置问题的回答只补充当前任务的执行参数，不解除或重置 Seedance 路由。
+> **Seedance 使用边界：** 本文件只负责把已定稿成果放到画布上或执行已经逐次授权的 Toonflow 视频生成，不参与提示词创作。只有路由已经锁定为 Seedance 时，才由主 `SKILL.md` 的“Seedance 路由锁存”进入内嵌 PART A。MiniMax 先读 `minimax-h3-prompt-optimizer`，不进入 PART A。**不得把五个画布读取工具或节点配置当作模型路由之前的入口步骤。** Seedance 正式提示词必须先由 PART A 规划/定稿；本文件不得重新分段、改写 A9.1/A9.2 或 MiniMax 字段、替换 Timeline、补表演/运镜/连续性规则。用户对画幅、分辨率、模式、音频等配置问题的回答只补充当前任务的执行参数，不解除或重置已锁定的模型路由。
 
 只用本轮实际提供的工具操作当前 Toonflow 画布。画布负责存放正文、建立连线、挂载媒体，并可在用户逐次明确授权后调用内置视频模型。不调用 `node:generateImage`、`node:generateAudio`，不用画布供应商出图或出音频。`listMediaModels`、视频节点 `node:setConfig`、`generateVideo` 或 `node:generateVideo` 仅用于本次已授权的视频片段、模型、数量和次数。制作流程见入口，版本和结果记录见[状态与交付](stateAndDelivery.md)。
 
