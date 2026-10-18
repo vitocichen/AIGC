@@ -11,6 +11,7 @@ from pathlib import Path
 
 HEADER = re.compile(
     r"^G\d+\｜Batch\s+.+?\s*/\s*段\s+\d+\s*"
+    r"\｜第\d+集\｜场\d+\｜[^｜\s]+"
     r"\｜目标模型：Seedance\s+(2\.[05])\s*"
     r"\｜本段时长：\d+(?:\.\d+)?s\s*"
     r"\｜全局时间：\d{2}:\d{2}–\d{2}:\d{2}$",
@@ -56,7 +57,7 @@ def split_transition_card(text: str, errors: list[str]) -> str:
 def validate_header(text: str, model: str, errors: list[str]) -> None:
     matches = HEADER.findall(text)
     if len(matches) != 1:
-        errors.append("必须且只能包含一个符合 A9 的 G0N 段头")
+        errors.append("必须且只能包含一个符合 A9 的段头：G号｜Batch / 段号｜第NN集｜场NN｜场名｜目标模型｜本段时长｜全局时间")
     elif matches[0] != model:
         errors.append(f"段头模型是 {matches[0]}，命令指定的是 {model}")
 
