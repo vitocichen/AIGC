@@ -17,6 +17,41 @@ HEADER = re.compile(
     re.MULTILINE,
 )
 
+CARD_MARKER = "【制片交接卡｜不发送给模型】"
+CARD_LABELS = [
+    "连续性关系：",
+    "视觉切法：",
+    "出段设计：",
+    "入段要求：",
+    "剪辑把手：",
+    "尾帧策略：",
+    "声音切法：",
+    "执行归属：",
+]
+PLACEHOLDER = re.compile(r"^(?:待定|略|同上|无说明|…+|\.{3,})$")
+
+
+def split_transition_card(text: str, errors: list[str]) -> str:
+    if text.count(CARD_MARKER) != 1:
+        errors.append(f"`{CARD_MARKER}` 必须且只能出现一次")
+        return text
+
+    model_text, card = text.split(CARD_MARKER, 1)
+    lines = [line.strip() for line in card.splitlines() if line.strip()]
+    if len(lines) != len(CARD_LABELS):
+        errors.append("制片交接卡必须且只能包含八个非空字段")
+        return model_text.strip()
+
+    for line, label in zip(lines, CARD_LABELS):
+        if not line.startswith(label):
+            errors.append(f"制片交接卡字段顺序错误，应为 `{label}`")
+            continue
+        value = line[len(label):].strip()
+        if not value or PLACEHOLDER.fullmatch(value):
+            errors.append(f"制片交接卡 `{label}` 的值不能为空或使用占位词")
+
+    return model_text.strip()
+
 
 def validate_header(text: str, model: str, errors: list[str]) -> None:
     matches = HEADER.findall(text)
@@ -64,6 +99,29 @@ def field_positions(text: str) -> list[tuple[str, int, int]]:
         re.MULTILINE,
     )
     return [(m.group(1), m.start(), m.end()) for m in pattern.finditer(text)]
+
+
+DIALOGUE = re.compile(r"「[^」]{2,}」|“[^”]{2,}”")
+OFFSCREEN_BEFORE_QUOTE = re.compile(r"(?<!不是)画外[^。\n]{0,40}(?:问|说|道)")
+OFFSCREEN_SPEAKER = re.compile(r"说话人是画外|没有对白")
+
+
+def validate_offscreen_dialogue(text: str, errors: list[str]) -> None:
+    """Quoted speech in the model body is lip-synced onto the only visible face."""
+    if not DIALOGUE.search(text):
+        return
+    assigned_offscreen = bool(OFFSCREEN_SPEAKER.search(text))
+    if not assigned_offscreen:
+        for match in DIALOGUE.finditer(text):
+            window = text[max(0, match.start() - 48):match.start()]
+            if OFFSCREEN_BEFORE_QUOTE.search(window):
+                assigned_offscreen = True
+                break
+    if assigned_offscreen:
+        errors.append(
+            "画外对白不能进入模型正文：出镜人物会被配上这句口型并容易烧成字幕。"
+            "原句只写在制片交接卡的声音切法里，由后期铺画外音；正文不要出现这句「」。"
+        )
 
 
 def validate_25(text: str, errors: list[str]) -> None:
@@ -136,11 +194,13 @@ def main() -> int:
         return 2
 
     errors: list[str] = []
-    validate_header(text, args.model, errors)
+    model_text = split_transition_card(text, errors)
+    validate_header(model_text, args.model, errors)
+    validate_offscreen_dialogue(model_text, errors)
     if args.model == "2.0":
-        validate_20(text, errors)
+        validate_20(model_text, errors)
     else:
-        validate_25(text, errors)
+        validate_25(model_text, errors)
 
     if errors:
         for error in errors:
