@@ -32,7 +32,7 @@ metadata:
 
 当前已有可执行剧情且用户要制作、生成、继续或修订视频时，先根据用户明确指定的模型家族锁存路由：
 
-- **MiniMax H3**：先读取全局技能 `minimax-h3-prompt-optimizer` 的 `SKILL.md`。读不到就停下。正文不得进入 PART A，不得使用 A9.1 或 A9.2。有参考图时按该技能的六字段书写：`subject_definitions`、`summary`、`retention_analysis`、`detailed_description`、`overall_soundscape`、`non_diegetic_music`。画内对白只放在 `<d>[Chinese] 原文</d>` 并绑定 `(S1)` 或 `(S2)`。字段结束后另起一行写「无屏幕文字。不要字幕，不要出现多余的中文文字、乱码或错别字。」模型正文不得含「8秒」「8 seconds」「本段时长」「16:9」、Seedance 字段名和中文图片文件名。不运行 `scripts/validate_seedance_prompt.py`。交给云端前去掉段头和制片交接卡。生成走云端 ComfyUI 融合 8 步，不走 Seedance 接口，不加 FL2VA。
+- **MiniMax H3**：先读取全局技能 `minimax-h3-prompt-optimizer` 的 `SKILL.md`。读不到就停下。正文不得进入 PART A，不得使用 A9.1 或 A9.2。有参考图时按该技能的六字段书写：`subject_definitions`、`summary`、`retention_analysis`、`detailed_description`、`overall_soundscape`、`non_diegetic_music`。画内对白只放在 `<d>[Chinese] 原文</d>` 并绑定 `(S1)` 或 `(S2)`。不要在字段结束后写「无屏幕文字」「不要字幕」「不要出现中文文字」。融合 8 步写这些词会把字烧进画面。去掉标点后超过 12 个字、并且中间有逗号时，用 `<scenetrans>` 把这一句拆成两个镜头。不点名不该出现的物件。模型正文不得含「8秒」「8 seconds」「本段时长」「16:9」、Seedance 字段名和中文图片文件名。不运行 `scripts/validate_seedance_prompt.py`。交给云端前去掉段头和制片交接卡。生成走云端 ComfyUI 融合 8 步，不走 Seedance 接口，不加 FL2VA。
 - **Seedance**：进入下方内嵌 PART A。用户只说 Seedance 但未定版本时，再问一次“2.0 还是 2.5”。
 - **Vidu**：先读取 `../vidu-video-prompt/SKILL.md`。用户必须选择 Q2 或 Q3；Q2 只执行 `../vidu-q2-video-prompt/SKILL.md`，Q3 只执行 `../vidu-q3-video-prompt/SKILL.md`。不得进入 PART A，不得把 A9 字段改名复用。
 - **其他模型**：读取该模型当前官方提示词与能力规范；没有可靠规范时报告缺口，不套用 Seedance 或 Vidu。
@@ -192,7 +192,7 @@ metadata:
 
 新写的正式提示词、视频、抽帧和画布节点标题用同一主干：`第01集_场01_机舱冷开场_G01`。Seedance 提示词写成 `第01集_场01_机舱冷开场_G01_Seedance2.5_v01.md`。MiniMax 提示词写成 `第01集_场01_机舱冷开场_G01_MiniMaxH3_v01.md`。视频是 `第01集_场01_机舱冷开场_G01_v01.mp4`。场名用短中文，不含空格和 `｜`。已落盘的旧文件不改名。
 
-该集视频同一目录必须有 `第01集_配音_v01.md`。写提示词时一并写出，台词变更时更新。每一段一节，写视频文件名、说话人、类型（画内对白 / 旁白 / 无对白）、段内时间、全片时间和原文；没有对白也写「无」。一段里有多句时按顺序各写一节，视频文件名相同。视频换了版本，稿里的文件名一起改。这份稿不发送给视频模型。画面禁止字幕、标题、说明卡和水印。2.5 的 `Avoid` 必须包含「不要字幕」。MiniMax 在字段结束后必须写「无屏幕文字。不要字幕，不要出现多余的中文文字、乱码或错别字。」没有不得交付或生成。成片烧有字幕则不采用。
+该集视频同一目录必须有 `第01集_配音_v01.md`。写提示词时一并写出，台词变更时更新。每一段一节，写视频文件名、说话人、类型（画内对白 / 旁白 / 无对白）、段内时间、全片时间和原文；没有对白也写「无」。一段里有多句时按顺序各写一节，视频文件名相同。视频换了版本，稿里的文件名一起改。这份稿不发送给视频模型。画面禁止字幕、标题、说明卡和水印。2.5 的 `Avoid` 必须包含「不要字幕」。MiniMax 正文不要写「字幕」「无字幕」「屏幕文字」「不要字幕」「不要出现中文文字」。写了这些词不得交付或生成。成片烧有字幕则不采用。
 
 ---
 
@@ -1501,7 +1501,7 @@ A12 只允许：
 
 | 正在解决的问题 | 阅读方法 | 将判断落实到哪里 |
 |---|---|---|
-| 把已确认剧本写成 MiniMax H3 提示词 | 全局技能 `minimax-h3-prompt-optimizer` | 六字段或三字段正文、`<d>` 对白、无屏幕文字。不进入 PART A，不写 A9 |
+| 把已确认剧本写成 MiniMax H3 提示词 | 全局技能 `minimax-h3-prompt-optimizer` | 六字段或三字段正文、`<d>` 对白。正文不写「字幕」类词，长句用 `<scenetrans>` 拆开。不进入 PART A，不写 A9 |
 | 把已确认剧本拆成 Seedance 2.0/2.5 分段提示词（节拍、时长、站位、表演、运镜、连续性、模板） | **本文件内嵌「SEEDANCE EPISODE DIRECTOR · PART A」** | 分段规划、每段正式提示词（A9.1/A9.2）、剧情保真锁 |
 | 把已确认剧本写成 Vidu Q2 提示词 | `../vidu-video-prompt/SKILL.md` → `../vidu-q2-video-prompt/SKILL.md` | Q2 Pro Fast 图生/首尾帧，或 Q2 Pro Reference，多型号专用校验 |
 | 把已确认剧本写成 Vidu Q3 提示词 | `../vidu-video-prompt/SKILL.md` → `../vidu-q3-video-prompt/SKILL.md` | Q3 Pro/Fast/Turbo/Reference/Mix/Drama/Ad，声画、多参考和专用校验 |

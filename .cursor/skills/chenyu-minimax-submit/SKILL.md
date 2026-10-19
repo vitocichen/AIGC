@@ -41,7 +41,7 @@ description: >-
 
 发给模型的字符串必须：
 
-- 只保留 MiniMax 字段。有参考图时是 `subject_definitions`、`summary`、`retention_analysis`、`detailed_description`、`overall_soundscape`、`non_diegetic_music`，再加末尾一行「无屏幕文字。不要字幕，不要出现多余的中文文字、乱码或错别字。」
+- 只保留 MiniMax 字段。有参考图时是 `subject_definitions`、`summary`、`retention_analysis`、`detailed_description`、`overall_soundscape`、`non_diegetic_music`。不要在末尾追加「无屏幕文字」「不要字幕」。融合 8 步写了这些词，会把字烧进画面。
 - 去掉文件开头的段头，去掉 `【制片交接卡｜不发送给模型】` 及其后全部内容。段头和交接卡留在磁盘文件里。
 - 确认发出的字符串里没有交接卡、Seedance 字段名、`Objective`、`Target duration`、`Timeline`、「8秒」「8 seconds」「本段时长」「16:9」、图片文件名和 `first_frame`。
 

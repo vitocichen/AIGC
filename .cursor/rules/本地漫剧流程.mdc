@@ -104,7 +104,7 @@ alwaysApply: true
 
 `类型` 只写 `画内对白`、`旁白` 或 `无对白`。`原文` 是要配的完整一句，不改字。旁白也写在这里，不写进视频画面。一段里有多句时，按说话顺序各写一节，视频文件名相同，并各写全片时间。视频另存了新版本，配音稿里的文件名一起改。
 
-**视频画面禁止字幕。** 不要烧录对白、旁白、标题、说明卡、水印或其他屏幕文字。Seedance 2.5 的 `Avoid` 必须写「不要字幕」。MiniMax 在字段全部写完后另起一行写「无屏幕文字。不要字幕，不要出现多余的中文文字、乱码或错别字。」没写不得交付或生成。成片里出现字幕，这一条不采用。配音只走上面的配音稿。
+**视频画面禁止字幕。** 不要烧录对白、旁白、标题、说明卡、水印或其他屏幕文字。Seedance 2.5 的 `Avoid` 必须写「不要字幕」。MiniMax 正文不要写「字幕」「无字幕」「屏幕文字」「不要字幕」「不要出现中文文字」。融合 8 步没有负向分支，写这些词会把字烧进画面。去掉标点后超过 12 个字、并且中间有逗号时，把这一句拆成两个镜头：前半句写成 `<d>[Chinese] ……<scenetrans></d>`，后半句接上。不点名不该出现的物件，只写画面里真正有的东西。成片里出现字幕，这一条不采用。配音只走上面的配音稿。
 
 ## 阶段与技能映射
 
@@ -147,7 +147,7 @@ alwaysApply: true
 
 - 已确认剧本进入视频制作时，先锁定用户指定的视频模型家族；提示词必须按目标模型路由，不能把一种模型的模板改个模型名后交给另一种模型。
 - 视频模型以入口里用户选定的方式为准，不再另问“Seedance、Vidu 还是其他”。不得用节点默认值或历史项目替换这次选择。
-- **MiniMax H3**：正文只按 `minimax-h3-prompt-optimizer` 写，不得使用 Seedance 的 A9、`Objective`、`Reference binding`、`Immutable locks`、`Target duration`、`Timeline`、`Visual direction`、`Audio direction`、`Preserve`、`Avoid`。有角色、场景或道具参考图时用六字段，顺序固定为 `subject_definitions`、`summary`、`retention_analysis`、`detailed_description`、`overall_soundscape`、`non_diegetic_music`。没有可复用参考、只做文生或单帧锚定时才用三字段：`integrated_multimodal_description`、`overall_soundscape`、`non_diegetic_music`。画内对白只出现一次，写在 `<d>[Chinese] 原文</d>` 里，并绑 `(S1)` 或 `(S2)`；一个镜头最多一句。说完写嘴唇闭合。没有对白就写「无台词，嘴唇全程闭合」。旁白和画外原文不进模型正文，只写进配音稿。模型正文不得出现「8秒」「8 seconds」「本段时长」「16:9」和中文图片文件名；时长只放在工作流的帧数里，8 秒是 192 帧。不运行 `validate_seedance_prompt.py`。交给云端前去掉段头和制片交接卡。生成不走 Seedance 接口，走用户当次确认仍在线的晨羽 ComfyUI。云上模型简写是融合Ref｜8步，提交前读取 `.cursor/skills/chenyu-minimax-submit/SKILL.md`，用 HTTP 调 `/queue`、`/upload/image`、`/prompt`、`/history`、`/view`。不要控制鼠标或浏览器去点网页生成。融合Ref｜8步：`1344×768`，一次不超过 8 秒、192 帧，不加 FL2VA。
+- **MiniMax H3**：正文只按 `minimax-h3-prompt-optimizer` 写，不得使用 Seedance 的 A9、`Objective`、`Reference binding`、`Immutable locks`、`Target duration`、`Timeline`、`Visual direction`、`Audio direction`、`Preserve`、`Avoid`。有角色、场景或道具参考图时用六字段，顺序固定为 `subject_definitions`、`summary`、`retention_analysis`、`detailed_description`、`overall_soundscape`、`non_diegetic_music`。没有可复用参考、只做文生或单帧锚定时才用三字段：`integrated_multimodal_description`、`overall_soundscape`、`non_diegetic_music`。画内对白只出现一次，写在 `<d>[Chinese] 原文</d>` 里，并绑 `(S1)` 或 `(S2)`；一个镜头最多一句。去掉标点后超过 12 个字、并且中间有逗号时，用 `<scenetrans>` 拆成两个镜头，前半句 `<d>[Chinese] ……<scenetrans></d>`，后半句接上。正文不要写「字幕」「无字幕」「屏幕文字」「不要字幕」「不要出现中文文字」，也不点名不该出现的物件。说完写嘴唇闭合。没有对白就写「无台词，嘴唇全程闭合」。旁白和画外原文不进模型正文，只写进配音稿。模型正文不得出现「8秒」「8 seconds」「本段时长」「16:9」和中文图片文件名；时长只放在工作流的帧数里，8 秒是 192 帧。不运行 `validate_seedance_prompt.py`。交给云端前去掉段头和制片交接卡。生成不走 Seedance 接口，走用户当次确认仍在线的晨羽 ComfyUI。云上模型简写是融合Ref｜8步，提交前读取 `.cursor/skills/chenyu-minimax-submit/SKILL.md`，用 HTTP 调 `/queue`、`/upload/image`、`/prompt`、`/history`、`/view`。不要控制鼠标或浏览器去点网页生成。融合Ref｜8步：`1344×768`，一次不超过 8 秒、192 帧，不加 FL2VA。
 - **Seedance 2.0/2.5**：严格执行 `workflow/SKILL.md` 内嵌的 `SEEDANCE EPISODE DIRECTOR · PART A`；选择 Seedance 后若版本未定，再问一次“2.0 还是 2.5”。全片段表、A9、A11 和 A12 保持原版。每个正式提示词交付前运行 `.cursor/skills/workflow/scripts/validate_seedance_prompt.py`。
 - **画外对白**：说话人不在本段画面里时，这句原文不得出现在模型正文。原句只写在交接卡「声音切法」和配音稿，标明后期铺画外音。有旁白时，画面里的人谁都不能说话，也不能开口。Seedance 在场的人自己说的台词仍写在正文里；一段里有多个人时，必须写明说话的是谁，正在说的人写明张嘴，不说话的每个人都写明闭嘴、不开口。没写明就不得交付或生成。Seedance 正文出现引号对白时，校验脚本会判失败，失败不得交付或生成。MiniMax 的画内对白只进 `<d>`，不写「」引号台词，也不写 Seedance 字段。发给模型的字符串不得含参考图中文文件名；文件名会烧到画面上。磁盘上的提示词仍可在交接卡之外的人读部分保留真实路径，但 MiniMax 模型正文用 `<Picture N>`，不写路径。
 - **Vidu**：先读取 `.cursor/skills/vidu-video-prompt/SKILL.md`。用户只说 Vidu 时必须让用户选择 Q2 或 Q3，不得由价格、节点默认值或历史任务替用户决定：
